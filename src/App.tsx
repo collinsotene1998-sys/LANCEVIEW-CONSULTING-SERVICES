@@ -18,7 +18,8 @@ import {
   Search, 
   Users, 
   Database,
-  ArrowBigUpDash
+  ArrowBigUpDash,
+  Mail
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import LeadCaptureFunnels from './components/LeadCaptureFunnels';
@@ -89,12 +90,17 @@ export default function App() {
           <span className="truncate text-editorial-muted">Notice: We monitor state, county, and judicial foreclosure auction records daily.</span>
         </div>
         <div className="flex items-center gap-4 shrink-0 font-mono">
+          <a href="mailto:info@lanceviewconsulting.com" className="hidden sm:flex hover:text-editorial-rust transition items-center gap-1 leading-none select-none">
+            <Mail className="w-3.5 h-3.5 text-editorial-rust" />
+            <span>info@lanceviewconsulting.com</span>
+          </a>
+          <span className="hidden sm:inline text-editorial-card">|</span>
           <a href="tel:6015688374" className="hover:text-editorial-rust transition flex items-center gap-1 leading-none select-none">
             <Phone className="w-3.5 h-3.5 text-editorial-rust" />
             <span>Speak with an Auditor: (601) 568-8374</span>
           </a>
-          <span className="hidden sm:inline text-editorial-card">|</span>
-          <span className="hidden sm:inline text-emerald-800 font-semibold uppercase tracking-wider bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
+          <span className="hidden md:inline text-editorial-card">|</span>
+          <span className="hidden md:inline text-emerald-800 font-semibold uppercase tracking-wider bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
             Zero Upfront Retainers Required
           </span>
         </div>
@@ -404,14 +410,22 @@ export default function App() {
             <h4 className="text-editorial-ink font-bold text-xs uppercase tracking-wider border-b border-editorial-card/80 pb-1.5">
               Contact &amp; Counsel
             </h4>
-            <div className="text-[11px] text-editorial-ink space-y-1">
+            <div className="text-[11px] text-editorial-ink space-y-2">
               <p className="font-semibold">Lanceview Consulting LLC</p>
-              <p className="flex items-center gap-1.5 font-mono">
-                <Phone className="w-3.5 h-3.5 text-editorial-rust" />
-                <a href="tel:6015688374" className="hover:text-editorial-rust transition">
-                  (601) 568-8374
-                </a>
-              </p>
+              <div className="space-y-1">
+                <p className="flex items-center gap-1.5 font-mono">
+                  <Phone className="w-3.5 h-3.5 text-editorial-rust" />
+                  <a href="tel:6015688374" className="hover:text-editorial-rust transition">
+                    (601) 568-8374
+                  </a>
+                </p>
+                <p className="flex items-center gap-1.5 font-mono">
+                  <Mail className="w-3.5 h-3.5 text-editorial-rust" />
+                  <a href="mailto:info@lanceviewconsulting.com" className="hover:text-editorial-rust transition">
+                    info@lanceviewconsulting.com
+                  </a>
+                </p>
+              </div>
             </div>
             <p className="leading-relaxed text-[10px] text-editorial-muted">
               Disclaimer: We do not serve as personal banking advisors, financial advisors, or public tax agents. Contingency terms are outlined explicitly in motion abstract agreements and notarized filings.
