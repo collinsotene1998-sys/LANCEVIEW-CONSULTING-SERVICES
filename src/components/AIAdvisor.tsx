@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, User, Loader2 } from 'lucide-react';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 export default function AIAdvisor() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,8 +47,19 @@ export default function AIAdvisor() {
       
       setMessages(prev => [...prev, { role: 'ai', content: data.text }]);
       
-      // If the AI decides to submit an inquiry, we could check the response for a special tag
-      // Or the backend can handle emailing directly if a function call is triggered.
+      // If the backend sent an inquiry, save it to Firestore directly from the client side
+      if (data.inquiryData) {
+        try {
+          const inquiryId = `inq-${Date.now()}`;
+          await setDoc(doc(db, 'ai_inquiries', inquiryId), {
+            ...data.inquiryData,
+            createdAt: serverTimestamp()
+          });
+          console.log('AI Inquiry saved to Firebase successfully.');
+        } catch (fbError) {
+          console.error('Error saving inquiry to Firebase:', fbError);
+        }
+      }
       
     } catch (error) {
       console.error('Chat error:', error);

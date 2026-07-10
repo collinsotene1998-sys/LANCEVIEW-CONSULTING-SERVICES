@@ -22,6 +22,8 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { SurplusSubmission, B2BSubmission } from '../types';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface LeadCaptureFunnelsProps {
   initialFunnel?: 'funds' | 'b2b';
@@ -53,6 +55,7 @@ export default function LeadCaptureFunnels({
   const [fundsErrors, setFundsErrors] = useState<Record<string, string>>({});
   const [isFundsComplete, setIsFundsComplete] = useState(false);
   const [submittedFundsRecord, setSubmittedFundsRecord] = useState<SurplusSubmission | null>(null);
+  const [isSubmittingFunds, setIsSubmittingFunds] = useState(false);
 
   // Sync pre-fills from parent (e.g. from the property search widget)
   React.useEffect(() => {
@@ -78,6 +81,7 @@ export default function LeadCaptureFunnels({
   const [b2bErrors, setB2bErrors] = useState<Record<string, string>>({});
   const [isB2BComplete, setIsB2BComplete] = useState(false);
   const [submittedB2BRecord, setSubmittedB2BRecord] = useState<B2BSubmission | null>(null);
+  const [isSubmittingB2B, setIsSubmittingB2B] = useState(false);
 
   // --- Funnel A Logic ---
   const validateFundsStep = (step: number) => {
@@ -115,14 +119,17 @@ export default function LeadCaptureFunnels({
     setFundsStep(prev => Math.max(1, prev - 1));
   };
 
-  const handleFundsSubmit = (e: React.FormEvent) => {
+  const handleFundsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFundsStep(3)) return;
 
+    setIsSubmittingFunds(true);
     const caseNumber = `SF-${Math.floor(100000 + Math.random() * 900000)}`;
     const estFunds = Math.floor(15000 + Math.random() * 180000);
+    const submissionId = `sub-${Date.now()}`;
+    
     const newSubmission: SurplusSubmission = {
-      id: `sub-${Date.now()}`,
+      id: submissionId,
       address: fundsData.address,
       county: fundsData.county,
       connection: fundsData.connection,
@@ -135,9 +142,20 @@ export default function LeadCaptureFunnels({
       estimatedFunds: estFunds
     };
 
-    onFundsSubmit(newSubmission);
-    setSubmittedFundsRecord(newSubmission);
-    setIsFundsComplete(true);
+    try {
+      await setDoc(doc(db, 'surplus_submissions', submissionId), {
+        ...newSubmission,
+        createdAt: serverTimestamp()
+      });
+      onFundsSubmit(newSubmission);
+      setSubmittedFundsRecord(newSubmission);
+      setIsFundsComplete(true);
+    } catch (error) {
+      console.error('Error saving submission:', error);
+      alert('Failed to submit inquiry. Please try again.');
+    } finally {
+      setIsSubmittingFunds(false);
+    }
   };
 
   const resetFundsForm = () => {
@@ -156,7 +174,7 @@ export default function LeadCaptureFunnels({
   };
 
   // --- Funnel B Logic ---
-  const handleB2BSubmit = (e: React.FormEvent) => {
+  const handleB2BSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errors: Record<string, string> = {};
     if (!b2bData.companyName.trim()) errors.companyName = 'Company / Investor Name is required';
@@ -168,8 +186,10 @@ export default function LeadCaptureFunnels({
     setB2bErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
+    setIsSubmittingB2B(true);
+    const submissionId = `b2b-${Date.now()}`;
     const newB2bSubmission: B2BSubmission = {
-      id: `b2b-${Date.now()}`,
+      id: submissionId,
       companyName: b2bData.companyName,
       contactPerson: b2bData.contactPerson,
       portfolioSize: b2bData.portfolioSize,
@@ -184,9 +204,20 @@ export default function LeadCaptureFunnels({
       })
     };
 
-    onB2BSubmit(newB2bSubmission);
-    setSubmittedB2BRecord(newB2bSubmission);
-    setIsB2BComplete(true);
+    try {
+      await setDoc(doc(db, 'b2b_submissions', submissionId), {
+        ...newB2bSubmission,
+        createdAt: serverTimestamp()
+      });
+      onB2BSubmit(newB2bSubmission);
+      setSubmittedB2BRecord(newB2bSubmission);
+      setIsB2BComplete(true);
+    } catch (error) {
+      console.error('Error saving submission:', error);
+      alert('Failed to submit brief. Please try again.');
+    } finally {
+      setIsSubmittingB2B(false);
+    }
   };
 
   const resetB2BForm = () => {

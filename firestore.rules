@@ -1,0 +1,70 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    
+    function isValidSurplusSubmission(data) {
+      return data.keys().hasAll(['address', 'county', 'connection', 'ownerName', 'phone', 'email', 'status', 'caseNumber', 'estimatedFunds', 'createdAt']) && 
+             data.keys().size() == 11 &&
+             data.address is string && data.address.size() <= 200 &&
+             data.county is string && data.county.size() <= 100 &&
+             data.connection in ["owner", "heir", "other"] &&
+             data.ownerName is string && data.ownerName.size() <= 100 &&
+             data.phone is string && data.phone.size() <= 20 &&
+             data.email is string && data.email.size() <= 150 &&
+             (data.submittedAt is string || data.submittedAt == null) &&
+             data.status in ["audit_pending", "title_clearing", "motion_filed", "funds_disbursed"] &&
+             data.caseNumber is string && data.caseNumber.size() <= 20 &&
+             data.estimatedFunds is number &&
+             data.createdAt == request.time;
+    }
+
+    function isValidB2BSubmission(data) {
+      return data.keys().hasAll(['companyName', 'contactPerson', 'portfolioSize', 'primaryGoal', 'roadblockDescription', 'createdAt']) && 
+             data.keys().size() >= 6 && data.keys().size() <= 8 &&
+             data.companyName is string && data.companyName.size() <= 150 &&
+             data.contactPerson is string && data.contactPerson.size() <= 100 &&
+             data.portfolioSize in ["1-5", "6-20", "21+"] &&
+             data.primaryGoal in ["section8", "contracting", "both"] &&
+             data.roadblockDescription is string && data.roadblockDescription.size() <= 1000 &&
+             (data.submittedAt is string || !('submittedAt' in data)) &&
+             (data.scheduledDate is string || !('scheduledDate' in data)) &&
+             data.createdAt == request.time;
+    }
+
+    function isValidAiInquiry(data) {
+      return data.keys().hasAll(['name', 'email', 'phone', 'details', 'createdAt']) &&
+             data.keys().size() == 5 &&
+             data.name is string && data.name.size() <= 100 &&
+             data.email is string && data.email.size() <= 150 &&
+             data.phone is string && data.phone.size() <= 20 &&
+             data.details is string && data.details.size() <= 2000 &&
+             data.createdAt == request.time;
+    }
+
+    match /surplus_submissions/{submissionId} {
+      allow create: if isValidId(submissionId) && isValidSurplusSubmission(incoming());
+      allow read, update, delete: if false; // Only backend or admin can read/update
+    }
+
+    match /b2b_submissions/{submissionId} {
+      allow create: if isValidId(submissionId) && isValidB2BSubmission(incoming());
+      allow read, update, delete: if false; 
+    }
+
+    match /ai_inquiries/{inquiryId} {
+      allow create: if isValidId(inquiryId) && isValidAiInquiry(incoming());
+      allow read, update, delete: if false;
+    }
+  }
+}

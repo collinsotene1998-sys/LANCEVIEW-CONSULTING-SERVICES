@@ -242,11 +242,14 @@ INTERACTION INSTRUCTIONS:
       config: chatConfig
     });
     
+    let inquiryData = null;
+
     // Handle function calling if the model decides to use the tool
     if (response.functionCalls && response.functionCalls.length > 0) {
       const call = response.functionCalls[0];
       if (call.name === 'submit_inquiry') {
         const { name, email, phone, details } = call.args as any;
+        inquiryData = { name, email, phone, details };
         const result = await sendInquiryEmail(name, email, phone, details);
         
         // Append the model's function call and the tool response to the history to generate the final response
@@ -274,7 +277,10 @@ INTERACTION INSTRUCTIONS:
       }
     }
 
-    res.json({ text: response.text || "I apologize, I encountered an issue retrieving an advice transcript." });
+    res.json({ 
+      text: response.text || "I apologize, I encountered an issue retrieving an advice transcript.",
+      inquiryData
+    });
   } catch (error: any) {
     console.error('Gemini API Integration Error:', error);
     res.status(500).json({ error: error.message || 'Failed to communicate with AI Advisor.' });
