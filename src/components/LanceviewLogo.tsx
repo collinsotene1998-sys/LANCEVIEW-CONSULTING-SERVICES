@@ -24,12 +24,51 @@ export default function LanceviewLogo({
 }: LanceviewLogoProps) {
   // SVG Icon element
   const icon = (
-    <img
-      src="/favicon.jpg"
-      alt="Lanceview Logo"
-      style={{ width: size, height: typeof size === 'number' ? size * 1.0 : size, objectFit: 'contain' }}
-      className={`inline-block select-none rounded-md overflow-hidden ${iconClassName}`}
-    />
+    <svg
+      width={size}
+      height={typeof size === 'number' ? size * 0.8 : size}
+      viewBox="0 0 100 80"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={`inline-block select-none ${iconClassName}`}
+    >
+      {/* Outer dark blue rounded container box */}
+      <rect
+        x="6"
+        y="6"
+        width="88"
+        height="68"
+        rx="9"
+        fill="none"
+        stroke="#0A1E31"
+        strokeWidth="7"
+      />
+
+      {/* Letter 'L' */}
+      <path
+        d="M 23,20 H 33 V 49 H 48 V 58 H 23 Z"
+        fill="#0A1E31"
+      />
+
+      {/* Left stem of 'V' */}
+      <polygon
+        points="43,20 52,20 61,58 52,58"
+        fill="#0A1E31"
+      />
+
+      {/* Bottom connecting base of 'V' / Navy corner */}
+      <polygon
+        points="52,58 61,58 67,46 58,46"
+        fill="#0A1E31"
+      />
+
+      {/* Golden curved leaf/swoosh right stem on 'V' */}
+      {/* Styled to mimic the uploaded shape: elegant curve tapering at the top right */}
+      <path
+        d="M 58.5,43 C 61,35 68.5,25.5 78,20 C 73.5,27 69,38 64.5,49.5 Z"
+        fill="#BCA374"
+      />
+    </svg>
   );
 
   if (variant === 'icon-only') {
