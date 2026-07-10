@@ -53,6 +53,13 @@ service cloud.firestore {
              data.createdAt == request.time;
     }
 
+    function isValidGuideDownload(data) {
+      return data.keys().hasAll(['email', 'createdAt']) &&
+             data.keys().size() == 2 &&
+             data.email is string && data.email.size() <= 150 &&
+             data.createdAt == request.time;
+    }
+
     match /surplus_submissions/{submissionId} {
       allow create: if isValidId(submissionId) && isValidSurplusSubmission(incoming());
       allow read, update, delete: if false; // Only backend or admin can read/update
@@ -65,6 +72,11 @@ service cloud.firestore {
 
     match /ai_inquiries/{inquiryId} {
       allow create: if isValidId(inquiryId) && isValidAiInquiry(incoming());
+      allow read, update, delete: if false;
+    }
+
+    match /guide_downloads/{downloadId} {
+      allow create: if isValidId(downloadId) && isValidGuideDownload(incoming());
       allow read, update, delete: if false;
     }
   }
