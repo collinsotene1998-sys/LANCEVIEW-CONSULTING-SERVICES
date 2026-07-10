@@ -3,6 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
+import nodemailer from 'nodemailer';
 
 // Initialize environment variables
 dotenv.config();
@@ -11,6 +12,17 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+
+// Set up Nodemailer transporter (User will need to provide real SMTP credentials)
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT || '587'),
+  secure: process.env.SMTP_SECURE === 'true',
+  auth: {
+    user: process.env.SMTP_USER || 'your-email@gmail.com',
+    pass: process.env.SMTP_PASS || 'your-app-password',
+  },
+});
 
 // Inlined county records to ensure server-side availability for AI context
 const mockCountyRecords = [
@@ -126,6 +138,43 @@ function getGeminiClient() {
   return aiClient;
 }
 
+// Function to handle sending the inquiry email
+async function sendInquiryEmail(name: string, email: string, phone: string, details: string) {
+  const mailOptions = {
+    from: process.env.SMTP_USER || 'your-email@gmail.com',
+    to: 'info@lanceviewconsulting.com',
+    subject: `New Lead Inquiry from AI Advisor: ${name}`,
+    text: `
+      You have received a new inquiry via the Lanceview AI Advisor.
+
+      Name: ${name}
+      Email: ${email}
+      Phone: ${phone}
+      
+      Inquiry Details:
+      ${details}
+      
+      Please reach out to them as soon as possible.
+    `,
+  };
+
+  console.log('Attempting to send email to info@lanceviewconsulting.com with details:', { name, email, phone, details });
+  
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn("SMTP credentials not configured. Email logged to console but not sent.");
+    return { success: true, message: "Email logged to console (SMTP not configured)." };
+  }
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Inquiry email sent successfully.');
+    return { success: true, message: "Email sent successfully." };
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return { success: false, message: "Failed to send email." };
+  }
+}
+
 // Chat response API route
 app.post('/api/chat', async (req, res) => {
   try {
@@ -137,7 +186,7 @@ app.post('/api/chat', async (req, res) => {
     const ai = getGeminiClient();
     
     // Map existing history to Gemini contents structure
-    const contents = messages.map((msg: any) => {
+    let contents = messages.map((msg: any) => {
       return {
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content || '' }]
@@ -147,7 +196,7 @@ app.post('/api/chat', async (req, res) => {
     const systemInstruction = `You are the "Lanceview Forensics Advisor", an elite smart AI assistant representing Lanceview Consulting LLC. 
 
 YOUR OBJECTIVE:
-Help clients search for unclaimed foreclosure or tax surplus assets that counties or banks may be holding, and guide them on initiating a zero-upfront contingency recovery claim with Lanceview.
+Help clients search for unclaimed foreclosure or tax surplus assets that counties or banks may be holding, answer simple questions about our services, and collect their data (Name, Email, Phone) to submit a formal inquiry to our business team.
 
 OUR CORE SERVICES:
 1. Surplus Funds Recovery: We represent property record holders and heirs on strict 100% contingency (zero fee upfront, we absorb attorney expenses & filings, clients owe zero unless we successfully recover their money).
@@ -159,29 +208,71 @@ ${JSON.stringify(mockCountyRecords, null, 2)}
 
 INTERACTION INSTRUCTIONS:
 - Be incredibly professional, reassuring, clear, and focused on building trust.
-- Actively help users search for claims. If they mention a county (like Duval, Orange, Fulton, Los Angeles, etc.), a matching name (like Mitchell, Peterson, Vance, Sterling, Reynolds, etc.), or a property address, search the database above.
-- If they ask general questions about recovery, answer clearly using your knowledge of excess proceeds/auditing rules. Encourage them to verify their property.
-- When you find a matching database record with "status" equal to "Unclaimed", ALWAYS print details professionally and append the EXACT special claims trigger format at the very end of your response:
-  [CLAIM_CARD:id="ID_HERE";address="ADDRESS_HERE";county="COUNTY_HERE";owner="OWNER_HERE";amount=AMOUNT_HERE]
-  
-  Example claim triggers:
-  - For rec-001: [CLAIM_CARD:id="rec-001";address="412 N Pine Street, Orlando, FL 32801";county="Orange County";owner="Margaret H. Mitchell";amount=64150]
-  - For rec-002: [CLAIM_CARD:id="rec-002";address="8914 Whispering Oaks Lane, Jacksonville, FL 32210";county="Duval County";owner="James L. Peterson";amount=112450]
-  - For rec-003: [CLAIM_CARD:id="rec-003";address="105 Orchard Ave, Tampa, FL 33603";county="Hillsborough County";owner="Arthur Vance Jr.";amount=48900]
-  - For rec-005: [CLAIM_CARD:id="rec-005";address="710 East Lake Drive, Decatur, GA 30030";county="DeKalb County";owner="Walter Miller Estate";amount=95600]
-  
-- The front-end chat interface will detect this tag to show a high-end clickable Claim Card with a primary button to "Initiate Assisted Recovery".
-- If no matching records exist, invite them to submit their general property search query directly into the secure intake form dynamically, and offer to have our auditors evaluate their case for free. No pressure, ever.`;
+- Actively help users search for claims. If they mention a county, a matching name, or a property address, search the database above.
+- If they ask general questions about recovery, answer clearly using your knowledge of excess proceeds/auditing rules.
+- IMPORTANT: Once you have answered their initial questions, or if they express interest in proceeding, ask for their Name, Email Address, and Phone Number to have an auditor contact them.
+- Once the user provides their Name, Email, and Phone Number, you MUST call the "submit_inquiry" tool with those details and a brief summary of their situation.
+- After calling the tool, confirm to the user that their inquiry has been forwarded to the Lanceview team (info@lanceviewconsulting.com and (601) 568-8374).`;
+
+    const chatConfig = {
+      systemInstruction,
+      temperature: 0.7,
+      tools: [{
+        functionDeclarations: [{
+          name: 'submit_inquiry',
+          description: 'Submit a user inquiry to the Lanceview Consulting business team.',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              name: { type: 'STRING', description: 'Full name of the prospect' },
+              email: { type: 'STRING', description: 'Email address of the prospect' },
+              phone: { type: 'STRING', description: 'Phone number of the prospect' },
+              details: { type: 'STRING', description: 'Summary of the user inquiry or situation' }
+            },
+            required: ['name', 'email', 'phone', 'details']
+          }
+        }]
+      }]
+    };
 
     // Call Gemini 3.5 Flash model
-    const response = await ai.models.generateContent({
+    let response = await ai.models.generateContent({
       model: 'gemini-3.5-flash',
       contents: contents,
-      config: {
-        systemInstruction,
-        temperature: 0.7,
-      }
+      config: chatConfig
     });
+    
+    // Handle function calling if the model decides to use the tool
+    if (response.functionCalls && response.functionCalls.length > 0) {
+      const call = response.functionCalls[0];
+      if (call.name === 'submit_inquiry') {
+        const { name, email, phone, details } = call.args as any;
+        const result = await sendInquiryEmail(name, email, phone, details);
+        
+        // Append the model's function call and the tool response to the history to generate the final response
+        contents.push({
+          role: 'model',
+          parts: [{ functionCall: call }]
+        });
+        
+        contents.push({
+          role: 'user',
+          parts: [{
+            functionResponse: {
+              name: 'submit_inquiry',
+              response: { result: result.message }
+            }
+          }]
+        });
+        
+        // Generate final response telling the user it was sent
+        response = await ai.models.generateContent({
+          model: 'gemini-3.5-flash',
+          contents: contents,
+          config: chatConfig
+        });
+      }
+    }
 
     res.json({ text: response.text || "I apologize, I encountered an issue retrieving an advice transcript." });
   } catch (error: any) {

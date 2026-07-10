@@ -29,6 +29,7 @@ import B2BLanding from './components/B2BLanding';
 import FaqSection from './components/FaqSection';
 import { SurplusSubmission, B2BSubmission } from './types';
 import LanceviewLogo from './components/LanceviewLogo';
+import AIAdvisor from './components/AIAdvisor';
 
 export default function App() {
   // Dual-Funnel Tab: 'funds' / 'b2b'
@@ -448,6 +449,8 @@ export default function App() {
         </div>
       </footer>
 
+      {/* AI Advisor Chat Widget */}
+      <AIAdvisor />
     </div>
   );
 }
