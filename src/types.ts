@@ -21,6 +21,7 @@ export interface B2BSubmission {
   id: string;
   companyName: string;
   contactPerson: string;
+  email: string;
   portfolioSize: '1-5' | '6-20' | '21+';
   primaryGoal: 'section8' | 'contracting' | 'both';
   roadblockDescription: string;

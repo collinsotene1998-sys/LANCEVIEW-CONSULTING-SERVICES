@@ -175,6 +175,57 @@ async function sendInquiryEmail(name: string, email: string, phone: string, deta
   }
 }
 
+async function sendAcknowledgementEmail(name: string, email: string, type: 'funds' | 'b2b') {
+  const isFunds = type === 'funds';
+  const mailOptions = {
+    from: process.env.SMTP_USER || 'info@lanceviewconsulting.com',
+    to: email,
+    subject: isFunds ? 'Lanceview Consulting - Surplus Funds Inquiry Received' : 'Lanceview Consulting - B2B Inquiry Received',
+    text: `Dear ${name},
+
+Thank you for reaching out to Lanceview Consulting LLC. We have successfully received your ${isFunds ? 'Surplus Funds Recovery' : 'B2B Real Estate'} inquiry.
+
+One of our specialized auditors will review your details and contact you shortly to discuss the next steps.
+
+If you have any immediate questions, please feel free to reply to this email or call us at (601) 568-8374.
+
+Best Regards,
+The Lanceview Consulting Team
+info@lanceviewconsulting.com
+(601) 568-8374`,
+  };
+
+  console.log(`Attempting to send acknowledgement email to ${email}`);
+  
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn("SMTP credentials not configured. Acknowledgement email logged to console but not sent.");
+    return { success: true };
+  }
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Acknowledgement email sent successfully.');
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending acknowledgement email:', error);
+    return { success: false, error };
+  }
+}
+
+app.post('/api/send-acknowledgement', async (req, res) => {
+  const { name, email, type } = req.body;
+  if (!name || !email || !type) {
+    return res.status(400).json({ error: 'Missing required fields: name, email, type' });
+  }
+
+  const result = await sendAcknowledgementEmail(name, email, type);
+  if (result.success) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ error: 'Failed to send acknowledgement email' });
+  }
+});
+
 // Chat response API route
 app.post('/api/chat', async (req, res) => {
   try {

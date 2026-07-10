@@ -30,10 +30,11 @@ service cloud.firestore {
     }
 
     function isValidB2BSubmission(data) {
-      return data.keys().hasAll(['companyName', 'contactPerson', 'portfolioSize', 'primaryGoal', 'roadblockDescription', 'createdAt']) && 
-             data.keys().size() >= 6 && data.keys().size() <= 8 &&
+      return data.keys().hasAll(['companyName', 'contactPerson', 'email', 'portfolioSize', 'primaryGoal', 'roadblockDescription', 'createdAt']) && 
+             data.keys().size() >= 7 && data.keys().size() <= 9 &&
              data.companyName is string && data.companyName.size() <= 150 &&
              data.contactPerson is string && data.contactPerson.size() <= 100 &&
+             data.email is string && data.email.size() <= 150 &&
              data.portfolioSize in ["1-5", "6-20", "21+"] &&
              data.primaryGoal in ["section8", "contracting", "both"] &&
              data.roadblockDescription is string && data.roadblockDescription.size() <= 1000 &&

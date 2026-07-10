@@ -27,6 +27,7 @@ import StatusChecker from './components/StatusChecker';
 import SurplusLanding from './components/SurplusLanding';
 import B2BLanding from './components/B2BLanding';
 import FaqSection from './components/FaqSection';
+import TestimonialsSection from './components/TestimonialsSection';
 import { SurplusSubmission, B2BSubmission } from './types';
 import LanceviewLogo from './components/LanceviewLogo';
 import AIAdvisor from './components/AIAdvisor';
@@ -342,6 +343,8 @@ export default function App() {
       </section>
 
       {/* DIRECT-RESPONSE FAQ CREDIBILITY BLOCK */}
+      <TestimonialsSection />
+
       <section className="bg-editorial-paper border-t border-editorial-card py-16 px-4">
         <FaqSection />
       </section>

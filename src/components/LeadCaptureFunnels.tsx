@@ -74,6 +74,7 @@ export default function LeadCaptureFunnels({
   const [b2bData, setB2bData] = useState({
     companyName: '',
     contactPerson: '',
+    email: '',
     portfolioSize: '1-5' as '1-5' | '6-20' | '21+',
     primaryGoal: 'section8' as 'section8' | 'contracting' | 'both',
     roadblockDescription: ''
@@ -147,6 +148,20 @@ export default function LeadCaptureFunnels({
         ...newSubmission,
         createdAt: serverTimestamp()
       });
+      
+      // Trigger automated acknowledgement email
+      await fetch('/api/send-acknowledgement', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: fundsData.ownerName,
+          email: fundsData.email,
+          type: 'funds'
+        }),
+      });
+
       onFundsSubmit(newSubmission);
       setSubmittedFundsRecord(newSubmission);
       setIsFundsComplete(true);
@@ -179,6 +194,11 @@ export default function LeadCaptureFunnels({
     const errors: Record<string, string> = {};
     if (!b2bData.companyName.trim()) errors.companyName = 'Company / Investor Name is required';
     if (!b2bData.contactPerson.trim()) errors.contactPerson = 'Contact Person name is required';
+    if (!b2bData.email.trim()) {
+      errors.email = 'Email address is required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(b2bData.email.trim())) {
+      errors.email = 'Please enter a valid email address';
+    }
     if (!b2bData.roadblockDescription.trim()) {
       errors.roadblockDescription = 'Please provide a brief description of your asset roadblock';
     }
@@ -192,6 +212,7 @@ export default function LeadCaptureFunnels({
       id: submissionId,
       companyName: b2bData.companyName,
       contactPerson: b2bData.contactPerson,
+      email: b2bData.email,
       portfolioSize: b2bData.portfolioSize,
       primaryGoal: b2bData.primaryGoal,
       roadblockDescription: b2bData.roadblockDescription,
@@ -209,6 +230,20 @@ export default function LeadCaptureFunnels({
         ...newB2bSubmission,
         createdAt: serverTimestamp()
       });
+      
+      // Trigger automated acknowledgement email
+      await fetch('/api/send-acknowledgement', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: b2bData.contactPerson,
+          email: b2bData.email,
+          type: 'b2b'
+        }),
+      });
+
       onB2BSubmit(newB2bSubmission);
       setSubmittedB2BRecord(newB2bSubmission);
       setIsB2BComplete(true);
@@ -224,6 +259,7 @@ export default function LeadCaptureFunnels({
     setB2bData({
       companyName: '',
       contactPerson: '',
+      email: '',
       portfolioSize: '1-5',
       primaryGoal: 'section8',
       roadblockDescription: ''
@@ -753,6 +789,39 @@ export default function LeadCaptureFunnels({
                         </p>
                       )}
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs uppercase tracking-wider font-bold text-editorial-muted">
+                      Secure Email Address <span className="text-editorial-rust">*</span>
+                    </label>
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-editorial-muted">
+                        <Mail className="w-4 h-4" />
+                      </span>
+                      <input
+                        type="email"
+                        required
+                        id="b2b-email"
+                        placeholder="marcus@summitholdings.com"
+                        value={b2bData.email}
+                        onChange={(e) => {
+                          setB2bData({ ...b2bData, email: e.target.value });
+                          if (b2bErrors.email) setB2bErrors({ ...b2bErrors, email: '' });
+                        }}
+                        className={`w-full bg-editorial-bg border text-editorial-ink placeholder:text-editorial-muted/65 rounded-lg pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 transition-all ${
+                          b2bErrors.email 
+                            ? 'border-editorial-rust focus:ring-editorial-rust/20' 
+                            : 'border-editorial-card focus:border-editorial-rust focus:ring-editorial-rust/20'
+                        }`}
+                      />
+                    </div>
+                    {b2bErrors.email && (
+                      <p className="text-xs text-editorial-rust flex items-center gap-1.5 mt-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {b2bErrors.email}
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
