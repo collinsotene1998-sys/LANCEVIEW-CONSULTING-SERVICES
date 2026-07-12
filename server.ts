@@ -226,6 +226,55 @@ app.post('/api/send-acknowledgement', async (req, res) => {
   }
 });
 
+async function sendGuideEmail(email: string) {
+  const mailOptions = {
+    from: process.env.SMTP_USER || 'info@lanceviewconsulting.com',
+    to: email,
+    subject: 'Lanceview Consulting - Your Surplus Recovery Guide',
+    text: `Thank you for your interest in Lanceview Consulting LLC.
+
+Please find the comprehensive Surplus Recovery Guide attached or download it from our secure portal.
+This 12-page PDF breakdown covers the statutory asset recovery process in detail.
+
+If you have any questions or would like to speak with one of our specialized auditors, please reply to this email or call us at (601) 568-8374.
+
+Best Regards,
+The Lanceview Consulting Team
+info@lanceviewconsulting.com
+(601) 568-8374`,
+  };
+
+  console.log(`Attempting to send guide email to ${email}`);
+  
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn("SMTP credentials not configured. Guide email logged to console but not sent.");
+    return { success: true };
+  }
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Guide email sent successfully.');
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending guide email:', error);
+    return { success: false, error };
+  }
+}
+
+app.post('/api/send-guide', async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ error: 'Missing required field: email' });
+  }
+
+  const result = await sendGuideEmail(email);
+  if (result.success) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ error: 'Failed to send guide email' });
+  }
+});
+
 // Chat response API route
 app.post('/api/chat', async (req, res) => {
   try {
@@ -268,22 +317,25 @@ INTERACTION INSTRUCTIONS:
     const chatConfig = {
       systemInstruction,
       temperature: 0.7,
-      tools: [{
-        functionDeclarations: [{
-          name: 'submit_inquiry',
-          description: 'Submit a user inquiry to the Lanceview Consulting business team.',
-          parameters: {
-            type: 'OBJECT',
-            properties: {
-              name: { type: 'STRING', description: 'Full name of the prospect' },
-              email: { type: 'STRING', description: 'Email address of the prospect' },
-              phone: { type: 'STRING', description: 'Phone number of the prospect' },
-              details: { type: 'STRING', description: 'Summary of the user inquiry or situation' }
-            },
-            required: ['name', 'email', 'phone', 'details']
-          }
-        }]
-      }]
+      tools: [
+        { googleSearch: {} },
+        {
+          functionDeclarations: [{
+            name: 'submit_inquiry',
+            description: 'Submit a user inquiry to the Lanceview Consulting business team.',
+            parameters: {
+              type: 'OBJECT',
+              properties: {
+                name: { type: 'STRING', description: 'Full name of the prospect' },
+                email: { type: 'STRING', description: 'Email address of the prospect' },
+                phone: { type: 'STRING', description: 'Phone number of the prospect' },
+                details: { type: 'STRING', description: 'Summary of the user inquiry or situation' }
+              },
+              required: ['name', 'email', 'phone', 'details']
+            }
+          }]
+        }
+      ]
     };
 
     // Call Gemini 3.5 Flash model

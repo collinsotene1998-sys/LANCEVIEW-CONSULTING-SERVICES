@@ -47,6 +47,18 @@ export default function SurplusLanding({ onStartInquiry }: SurplusLandingProps) 
         email: guideEmail.trim(),
         createdAt: serverTimestamp()
       });
+
+      // Send the automated email confirmation
+      await fetch('/api/send-guide', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: guideEmail.trim()
+        }),
+      });
+
       setGuideSubmitted(true);
     } catch (error) {
       console.error('Error recording guide download:', error);
