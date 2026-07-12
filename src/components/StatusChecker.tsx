@@ -223,13 +223,13 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
       });
 
       if (!response.ok) {
-        throw new Error('Our AI advisory agent was temporarily disconnected. Please try again.');
+        throw new Error('I encountered an error connecting to our system. Please try again or contact us directly at info@lanceviewconsulting.com or (601) 568-8374.');
       }
 
       const data = await response.json();
       setMessages(prev => [...prev, { role: 'assistant' as const, content: data.text }]);
     } catch (err: any) {
-      setChatError(err.message || 'Connecting to the secure AI services failed.');
+      setMessages(prev => [...prev, { role: 'assistant', content: 'I encountered an error connecting to our system. Please try again or contact us directly at info@lanceviewconsulting.com or (601) 568-8374.' }]);
     } finally {
       setChatLoading(false);
     }
@@ -696,7 +696,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                 )}
 
                 {chatError && (
-                  <div className="bg-editorial-rust/5 border border-editorial-rust/35 p-3 rounded-xl text-xs text-editorial-rust">
+                  <div className="bg-editorial-rust/5 border border-editorial-rust/35 p-3 rounded-xl text-xs text-editorial-rust hidden">
                     ⚠️ {chatError}
                   </div>
                 )}

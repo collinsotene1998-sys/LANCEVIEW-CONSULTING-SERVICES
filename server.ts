@@ -381,12 +381,12 @@ INTERACTION INSTRUCTIONS:
     }
 
     res.json({ 
-      text: response.text || "I apologize, I encountered an issue retrieving an advice transcript.",
+      text: response.text || "I encountered an error connecting to our system. Please try again or contact us directly at info@lanceviewconsulting.com or (601) 568-8374.",
       inquiryData
     });
   } catch (error: any) {
     console.error('Gemini API Integration Error:', error);
-    res.status(500).json({ error: error.message || 'Failed to communicate with AI Advisor.' });
+    res.status(500).json({ error: error.message || 'I encountered an error connecting to our system. Please try again or contact us directly at info@lanceviewconsulting.com or (601) 568-8374.' });
   }
 });
 
