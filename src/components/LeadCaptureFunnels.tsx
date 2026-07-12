@@ -641,8 +641,21 @@ export default function LeadCaptureFunnels({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8 space-y-6 animate-fade-in"
               >
-                <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
-                  <CheckCircle2 className="w-8 h-8" />
+                <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                    className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center shadow-inner relative z-10"
+                  >
+                    <CheckCircle2 className="w-8 h-8" />
+                  </motion.div>
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0.8 }}
+                    animate={{ scale: 1.5, opacity: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                    className="absolute inset-0 bg-emerald-200 rounded-full z-0"
+                  />
                 </div>
                 
                 <div className="space-y-2">
@@ -905,8 +918,21 @@ export default function LeadCaptureFunnels({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8 space-y-6 animate-fade-in"
               >
-                <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-650 rounded-full flex items-center justify-center mx-auto shadow-inner">
-                  <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                    className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-650 rounded-full flex items-center justify-center shadow-inner relative z-10"
+                  >
+                    <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                  </motion.div>
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0.8 }}
+                    animate={{ scale: 1.5, opacity: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                    className="absolute inset-0 bg-emerald-200 rounded-full z-0"
+                  />
                 </div>
 
                 <div className="space-y-2">

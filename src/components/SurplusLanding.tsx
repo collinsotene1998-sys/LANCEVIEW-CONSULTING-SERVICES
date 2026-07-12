@@ -107,6 +107,10 @@ export default function SurplusLanding({ onStartInquiry }: SurplusLandingProps) 
 
           <div className="space-y-3.5">
             <div className="flex justify-between items-center text-xs border-b border-editorial-ink/5 pb-2">
+              <span className="text-editorial-muted">Surplus List Updates:</span>
+              <span className="text-editorial-rust font-semibold font-mono">Every 3 Days</span>
+            </div>
+            <div className="flex justify-between items-center text-xs border-b border-editorial-ink/5 pb-2">
               <span className="text-editorial-muted">Claim Filing Window:</span>
               <span className="text-editorial-rust font-semibold font-mono">60 to 120 Days Avg.</span>
             </div>

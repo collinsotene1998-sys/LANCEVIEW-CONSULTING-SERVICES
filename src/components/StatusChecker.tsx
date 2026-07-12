@@ -308,7 +308,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                       Foreclosure Registry Auditor Tool
                     </h3>
                     <p className="text-xs text-editorial-muted">
-                      Daily live audit of state, county, and auction foreclosures.
+                      Database updated every 3 days from state and county auction records.
                     </p>
                   </div>
                 </div>
