@@ -102,7 +102,7 @@ export default function App() {
             <span>Speak with an Auditor: (601) 568-8374</span>
           </a>
           <span className="hidden md:inline text-editorial-card">|</span>
-          <span className="hidden md:inline text-emerald-800 font-semibold uppercase tracking-wider bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
+          <span className="hidden md:inline text-purple-800 font-semibold uppercase tracking-wider bg-purple-100 px-2 py-0.5 rounded border border-purple-200">
             Zero Upfront Retainers Required
           </span>
         </div>

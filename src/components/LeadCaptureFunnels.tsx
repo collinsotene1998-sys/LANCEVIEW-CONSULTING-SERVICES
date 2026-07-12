@@ -529,11 +529,11 @@ export default function LeadCaptureFunnels({
                       animate={{ opacity: 1, x: 0 }}
                       className="space-y-5"
                     >
-                      <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-xs md:text-sm text-emerald-800 leading-relaxed">
-                        <ShieldCheck className="w-5.5 h-5.5 text-emerald-600 shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-purple-50 border border-purple-200 p-4 rounded-xl text-xs md:text-sm text-purple-800 leading-relaxed">
+                        <ShieldCheck className="w-5.5 h-5.5 text-purple-600 shrink-0 mt-0.5" />
                         <div>
-                          <strong className="text-emerald-900 uppercase tracking-wider text-xs font-sans block">Step 3: Secure Legal Audit Request</strong>
-                          <p className="mt-0.5 text-emerald-800">
+                          <strong className="text-purple-900 uppercase tracking-wider text-xs font-sans block">Step 3: Secure Legal Audit Request</strong>
+                          <p className="mt-0.5 text-purple-800">
                             We work on a strict contingency basis. There are zero retainers, zero deposits, and no out-of-pocket costs whatsoever. Provide your communication details below.
                           </p>
                         </div>
@@ -646,7 +646,7 @@ export default function LeadCaptureFunnels({
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
-                    className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center shadow-inner relative z-10"
+                    className="w-16 h-16 bg-purple-50 border border-purple-200 text-purple-600 rounded-full flex items-center justify-center shadow-inner relative z-10"
                   >
                     <CheckCircle2 className="w-8 h-8" />
                   </motion.div>
@@ -654,7 +654,7 @@ export default function LeadCaptureFunnels({
                     initial={{ scale: 0.8, opacity: 0.8 }}
                     animate={{ scale: 1.5, opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                    className="absolute inset-0 bg-emerald-200 rounded-full z-0"
+                    className="absolute inset-0 bg-purple-200 rounded-full z-0"
                   />
                 </div>
                 
@@ -691,7 +691,7 @@ export default function LeadCaptureFunnels({
                       </div>
                       <div>
                         <span className="text-editorial-muted select-none">Estimated Recoverable: </span>
-                        <strong className="text-emerald-700 text-sm font-semibold">
+                        <strong className="text-purple-700 text-sm font-semibold">
                           ${submittedFundsRecord.estimatedFunds.toLocaleString()} (est.)
                         </strong>
                       </div>
@@ -923,15 +923,15 @@ export default function LeadCaptureFunnels({
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
-                    className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-650 rounded-full flex items-center justify-center shadow-inner relative z-10"
+                    className="w-16 h-16 bg-purple-50 border border-purple-200 text-purple-650 rounded-full flex items-center justify-center shadow-inner relative z-10"
                   >
-                    <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                    <CheckCircle2 className="w-8 h-8 text-purple-600" />
                   </motion.div>
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0.8 }}
                     animate={{ scale: 1.5, opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                    className="absolute inset-0 bg-emerald-200 rounded-full z-0"
+                    className="absolute inset-0 bg-purple-200 rounded-full z-0"
                   />
                 </div>
 

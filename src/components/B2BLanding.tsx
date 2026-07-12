@@ -117,9 +117,9 @@ export default function B2BLanding({ onStartB2B }: B2BLandingProps) {
                 <div>
                   <span className={`text-[10px] font-mono font-bold inline-block py-1 px-2 rounded uppercase ${
                     passPercentage >= 100 
-                      ? 'text-emerald-800 bg-emerald-100 border border-emerald-200' 
+                      ? 'text-purple-800 bg-purple-100 border border-purple-200' 
                       : passPercentage >= 50 
-                        ? 'text-amber-850 bg-amber-100 border border-amber-200' 
+                        ? 'text-amber-800 bg-amber-100 border border-amber-200' 
                         : 'text-red-800 bg-red-100 border border-red-200'
                   }`}>
                     {passPercentage === 100 ? 'Compliant' : passPercentage >= 50 ? 'Moderate Risk' : 'High Risk Failure'}
@@ -136,7 +136,7 @@ export default function B2BLanding({ onStartB2B }: B2BLandingProps) {
                   style={{ width: `${passPercentage}%` }} 
                   className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center transition-all duration-500 ${
                     passPercentage >= 100 
-                      ? 'bg-emerald-600' 
+                      ? 'bg-purple-600' 
                       : passPercentage >= 50 
                         ? 'bg-amber-500' 
                         : 'bg-red-500'

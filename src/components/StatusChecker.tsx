@@ -312,8 +312,8 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                     </p>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded flex items-center gap-1.5 font-semibold">
-                  <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-pulse" />
+                <span className="text-[10px] font-mono text-purple-800 bg-purple-100 border border-purple-200 px-2.5 py-1 rounded flex items-center gap-1.5 font-semibold">
+                  <span className="w-1.5 h-1.5 bg-purple-600 rounded-full animate-pulse" />
                   Active Forensics DB
                 </span>
               </div>
@@ -368,7 +368,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                             </span>
                             <span className={`text-[9px] font-mono px-2 py-0.5 rounded border uppercase font-bold ${
                               record.status === 'Unclaimed' 
-                                ? 'bg-emerald-100 border-emerald-200 text-emerald-800' 
+                                ? 'bg-purple-100 border-purple-200 text-purple-800' 
                                 : record.status === 'In Audit'
                                   ? 'bg-amber-100 border-amber-200 text-amber-800'
                                   : 'bg-editorial-card border-editorial-card text-editorial-muted'
@@ -394,7 +394,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                         <div className="flex items-center md:flex-col items-end gap-3 md:gap-2 self-stretch md:self-auto justify-between border-t md:border-t-0 border-editorial-card/80 md:pt-0 pt-2.5">
                           <div className="text-left md:text-right">
                             <p className="text-[9px] font-mono text-editorial-muted uppercase">UNCLAIMED SURPLUS</p>
-                            <p className="text-base font-bold text-emerald-700 font-mono">
+                            <p className="text-base font-bold text-purple-700 font-mono">
                               ${record.surplusAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                             </p>
                           </div>
@@ -491,7 +491,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                         <p className="text-[9px] text-editorial-muted font-mono">Owner: {trackingRecord.ownerName}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded font-bold">
+                        <span className="text-[10px] font-mono text-purple-800 bg-purple-100 border border-purple-200 px-2.5 py-1 rounded font-bold">
                           ${trackingRecord.estimatedFunds.toLocaleString()}
                         </span>
                         <p className="text-[9px] text-editorial-muted font-mono mt-1">Submitted: {trackingRecord.submittedAt}</p>
@@ -510,7 +510,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                             <div className="flex flex-col items-center">
                               <div className={`w-6 h-6 rounded-full flex items-center justify-center border text-[10px] font-mono font-bold shrink-0 transition-colors duration-300 ${
                                 isCompleted 
-                                  ? 'bg-emerald-100 border-emerald-200 text-emerald-800'
+                                  ? 'bg-purple-100 border-purple-200 text-purple-800'
                                   : isActive
                                     ? 'bg-amber-100 border-amber-200 text-amber-800 animate-pulse font-bold'
                                     : 'bg-editorial-bg border-editorial-card text-editorial-muted'
@@ -525,7 +525,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                               </div>
                               {idx < trackingRecord.steps.length - 1 && (
                                 <div className={`w-0.5 h-10 my-1 ${
-                                  isCompleted ? 'bg-emerald-600/35' : 'bg-editorial-card'
+                                  isCompleted ? 'bg-purple-600/35' : 'bg-editorial-card'
                                 }`} />
                               )}
                             </div>
@@ -592,7 +592,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                   <div>
                     <h3 className="text-sm font-bold text-editorial-ink">Lanceview Forensics AI Advisor</h3>
                     <p className="text-[10px] text-editorial-muted flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse inline-block" />
+                      <span className="w-2 h-2 rounded-full bg-purple-600 animate-pulse inline-block" />
                       Online • Grounded in County Records Index
                     </p>
                   </div>
@@ -656,7 +656,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                                   </div>
                                   <div className="text-right shrink-0">
                                     <p className="text-[8px] font-mono text-editorial-muted uppercase">Unclaimed Surplus</p>
-                                    <p className="text-sm font-black text-emerald-800 font-mono">
+                                    <p className="text-sm font-black text-purple-800 font-mono">
                                       ${card.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                     </p>
                                   </div>
@@ -712,7 +712,7 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   disabled={chatLoading}
-                  className="flex-1 bg-editorial-paper border border-editorial-card text-editorial-ink placeholder:text-editorial-muted/75 rounded-xl px-4 py-3 text-xs md:text-sm focus:outline-none focus:border-editorial-rust-gold focus:ring-1 focus:ring-editorial-rust/15 font-sans"
+                  className="flex-1 bg-editorial-paper border border-editorial-card text-editorial-ink placeholder:text-editorial-muted/75 rounded-xl px-4 py-3 text-xs md:text-sm focus:outline-none focus:border-editorial-rust focus:ring-1 focus:ring-editorial-rust/15 font-sans"
                 />
                 <button
                   type="submit"
@@ -781,14 +781,14 @@ export default function StatusChecker({ onSelectRecord, submittedCases = [] }: S
               {/* Trust Metric banner */}
               <div className="bg-editorial-paper border border-editorial-card rounded-2xl p-5 shadow-sm space-y-3 font-sans">
                 <h4 className="text-xs font-mono uppercase tracking-widest text-editorial-ink font-bold flex items-center gap-11.5">
-                  <TrendingUp className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <TrendingUp className="w-4 h-4 text-purple-700 shrink-0" />
                   Lanceview Safety Promise
                 </h4>
                 <div className="text-[11px] text-editorial-muted leading-relaxed space-y-2">
                   <p>
                     Unlike third-party agencies, Lanceview works with bonded attorneys to draft court petitions. We provide full state notary coverage and absorb all docket recording expenses.
                   </p>
-                  <div className="bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg text-emerald-800 text-[10px] font-semibold">
+                  <div className="bg-purple-50 border border-purple-200 p-2.5 rounded-lg text-purple-800 text-[10px] font-semibold">
                     ✅ $1.2M+ in forensics surplus assets successfully disbursed to date.
                   </div>
                 </div>

@@ -6,12 +6,12 @@
   --font-serif: "Cormorant Garamond", "Lora", Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-editorial-bg: #E3EAE4;
-  --color-editorial-ink: #0B2215;
-  --color-editorial-rust: #BF9024;
-  --color-editorial-paper: #F4F8F5;
-  --color-editorial-card: #CBD6CD;
-  --color-editorial-muted: #4F5E54;
+  --color-editorial-bg: #000000;
+  --color-editorial-ink: #FFFFFF;
+  --color-editorial-rust: #9333EA;
+  --color-editorial-paper: #120C18;
+  --color-editorial-card: #2E1B40;
+  --color-editorial-muted: #A3A3A3;
 }
 
 /* Custom scrollbar adjustments for aesthetic density */
@@ -20,18 +20,18 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #E3EAE4;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B4C5B9;
+  background: #2E1B40;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #8FA295;
+  background: #9333EA;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #E3EAE4;
-  color: #0B2215;
+  background-color: #000000;
+  color: #FFFFFF;
 }

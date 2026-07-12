@@ -40,33 +40,33 @@ export default function LanceviewLogo({
         height="68"
         rx="9"
         fill="none"
-        stroke="#0A1E31"
+        stroke="#FFFFFF"
         strokeWidth="7"
       />
 
       {/* Letter 'L' */}
       <path
         d="M 23,20 H 33 V 49 H 48 V 58 H 23 Z"
-        fill="#0A1E31"
+        fill="#FFFFFF"
       />
 
       {/* Left stem of 'V' */}
       <polygon
         points="43,20 52,20 61,58 52,58"
-        fill="#0A1E31"
+        fill="#FFFFFF"
       />
 
       {/* Bottom connecting base of 'V' / Navy corner */}
       <polygon
         points="52,58 61,58 67,46 58,46"
-        fill="#0A1E31"
+        fill="#FFFFFF"
       />
 
       {/* Golden curved leaf/swoosh right stem on 'V' */}
       {/* Styled to mimic the uploaded shape: elegant curve tapering at the top right */}
       <path
         d="M 58.5,43 C 61,35 68.5,25.5 78,20 C 73.5,27 69,38 64.5,49.5 Z"
-        fill="#BCA374"
+        fill="#9333EA"
       />
     </svg>
   );
@@ -83,7 +83,7 @@ export default function LanceviewLogo({
           <div className="text-xl md:text-2xl font-sans font-black tracking-wider text-editorial-ink leading-none">
             LANCEVIEW
           </div>
-          <div className="text-[10px] md:text-xs font-mono font-semibold tracking-widest text-[#BCA374] uppercase mt-1">
+          <div className="text-[10px] md:text-xs font-mono font-semibold tracking-widest text-[#9333EA] uppercase mt-1">
             CONSULTING LLC
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function LanceviewLogo({
         <div className="text-base font-sans font-black tracking-tight text-editorial-ink leading-none">
           LANCEVIEW
         </div>
-        <div className="text-[9px] font-sans font-bold tracking-widest text-[#BCA374] uppercase mt-1">
+        <div className="text-[9px] font-sans font-bold tracking-widest text-[#9333EA] uppercase mt-1">
           CONSULTING LLC
         </div>
       </div>

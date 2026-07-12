@@ -316,8 +316,8 @@ export default function SurplusLanding({ onStartInquiry }: SurplusLandingProps) 
 
               {guideSubmitted ? (
                 <div className="text-center py-6">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 className="w-8 h-8 text-green-600" />
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="w-8 h-8 text-purple-600" />
                   </div>
                   <h3 className="text-xl font-serif font-semibold text-editorial-ink mb-2">Check Your Inbox</h3>
                   <p className="text-editorial-muted text-sm mb-6">
