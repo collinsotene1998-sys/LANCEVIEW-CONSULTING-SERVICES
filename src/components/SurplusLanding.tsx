@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { Toast } from './Toast';
 
 interface SurplusLandingProps {
   onStartInquiry: () => void;
@@ -35,6 +36,7 @@ export default function SurplusLanding({ onStartInquiry }: SurplusLandingProps) 
   const [guideEmail, setGuideEmail] = useState('');
   const [isSubmittingGuide, setIsSubmittingGuide] = useState(false);
   const [guideSubmitted, setGuideSubmitted] = useState(false);
+  const [toastConfig, setToastConfig] = useState({ isVisible: false, message: '' });
 
   const handleGuideSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +62,7 @@ export default function SurplusLanding({ onStartInquiry }: SurplusLandingProps) 
       });
 
       setGuideSubmitted(true);
+      setToastConfig({ isVisible: true, message: 'Recovery guide emailed successfully.' });
     } catch (error) {
       console.error('Error recording guide download:', error);
       alert('Failed to process request. Please try again.');
@@ -70,6 +73,11 @@ export default function SurplusLanding({ onStartInquiry }: SurplusLandingProps) 
 
   return (
     <div className="space-y-12 animate-fade-in" id="surplus-recovery-why-us">
+      <Toast 
+        message={toastConfig.message} 
+        isVisible={toastConfig.isVisible} 
+        onClose={() => setToastConfig(prev => ({ ...prev, isVisible: false }))} 
+      />
       {/* Editorial Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         <div className="lg:col-span-7 space-y-6">

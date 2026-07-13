@@ -24,6 +24,7 @@ import {
 import { SurplusSubmission, B2BSubmission } from '../types';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { Toast } from './Toast';
 
 interface LeadCaptureFunnelsProps {
   initialFunnel?: 'funds' | 'b2b';
@@ -56,6 +57,9 @@ export default function LeadCaptureFunnels({
   const [isFundsComplete, setIsFundsComplete] = useState(false);
   const [submittedFundsRecord, setSubmittedFundsRecord] = useState<SurplusSubmission | null>(null);
   const [isSubmittingFunds, setIsSubmittingFunds] = useState(false);
+
+  // Toast state
+  const [toastConfig, setToastConfig] = useState({ isVisible: false, message: '' });
 
   // Sync pre-fills from parent (e.g. from the property search widget)
   React.useEffect(() => {
@@ -165,6 +169,7 @@ export default function LeadCaptureFunnels({
       onFundsSubmit(newSubmission);
       setSubmittedFundsRecord(newSubmission);
       setIsFundsComplete(true);
+      setToastConfig({ isVisible: true, message: 'Surplus Funds case file generated successfully.' });
     } catch (error) {
       console.error('Error saving submission:', error);
       alert('Failed to submit inquiry. Please try again.');
@@ -247,6 +252,7 @@ export default function LeadCaptureFunnels({
       onB2BSubmit(newB2bSubmission);
       setSubmittedB2BRecord(newB2bSubmission);
       setIsB2BComplete(true);
+      setToastConfig({ isVisible: true, message: 'B2B Portfolio Consultation booked successfully.' });
     } catch (error) {
       console.error('Error saving submission:', error);
       alert('Failed to submit brief. Please try again.');
@@ -298,6 +304,12 @@ export default function LeadCaptureFunnels({
           <span>B2B Investor &amp; Landlord Portal</span>
         </button>
       </div>
+      
+      <Toast 
+        message={toastConfig.message} 
+        isVisible={toastConfig.isVisible} 
+        onClose={() => setToastConfig(prev => ({ ...prev, isVisible: false }))} 
+      />
 
       <AnimatePresence mode="wait">
         {activeTab === 'funds' ? (
